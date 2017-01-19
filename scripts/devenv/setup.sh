@@ -13,6 +13,14 @@ echo deb https://apt.dockerproject.org/repo ubuntu-xenial main > /etc/apt/source
 # Update system
 apt-get update -qq
 
+# Install softhsm2
+
+apt-get install softhsm2
+# Seems a common problem with SoftHSM, (seen on MAC and 390) keystore dir not created by apt-get install
+# Directory from /etc/softhsm/softhsm2.conf
+mkdir -p /var/lib/softhsm/tokens/ 
+softhsm2-util --init-token --slot 0 --label "My token 1" --so-pin 1234 --pin 98765432
+
 # Install docker
 apt-get install -y linux-image-extra-$(uname -r) apparmor docker-engine
 
